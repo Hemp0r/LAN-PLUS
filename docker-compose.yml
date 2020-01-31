@@ -1,0 +1,24 @@
+version: "3.7"
+services: 
+    reverse:
+        image: nginx
+        hostname: reverse
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - ./config/nginx:/etc/nginx
+            - ./config/ssl:/etc/ssl/private
+    db:
+        image: bitnami/mariadb:latest
+        volumes:
+            - ./data/mariadb:/bitnami/mariadb
+        env_file: ./config/db.env
+        networks:
+            - default
+    cms:
+        image: agentejo/cockpit
+        hostname: cms
+        networks:
+            - default
+        env_file: ./config/cms.env
