@@ -11,6 +11,7 @@ services:
             - ./config/ssl:/etc/ssl/private
     db:
         image: bitnami/mariadb:latest
+        hostname: db
         volumes:
             - ./data/mariadb:/bitnami/mariadb
         env_file: ./config/db.env
@@ -19,6 +20,23 @@ services:
     cms:
         image: agentejo/cockpit
         hostname: cms
+        volumes: 
+            - ./data/cms/config:/var/www/html/config
+            - ./data/cms/storage:/var/www/html/storage
         networks:
             - default
         env_file: ./config/cms.env
+    lanplus-frontend:
+        image: hemp0r/lanplus-webapp:latest
+        hostname: lanplus-frontend
+        env_file: ./config/frontend.env
+        networks:
+            - default
+    lanplus-backend:
+        image: hemp0r/lanplus-api:latest
+        hostname: lanplus-backend
+        env_file: ./config/backend.env
+        volumes:
+            - ./data/profiles:/var/lanplus/profiles
+        networks:
+            - default
